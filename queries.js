@@ -5,12 +5,27 @@ const pool = require('./db/pool');
 //    Return an array of objects. Each object should have: title, url, username.
 const getAllBookmarksWithUsername = async () => {
   // YOUR CODE HERE
+  const query = `
+  SELECT bookmarks.title, bookmarks.url, users.username
+  FROM bookmarks
+  JOIN users ON bookmarks.user_id = users.user_id`;
+
+  const result = await db.query(query);
+  return results.rows;
 };
 
 // 2. Get all bookmarks saved by a specific user.
 //    Return an array of objects. Each object should have: title, url, username.
 const getBookmarksByUsername = async (username) => {
   // YOUR CODE HERE
+  const query = `
+  SELECT bookmarks.title, bookmarks.url, users.username
+  FROM bookmarks
+  JOIN users ON bookmarks.user_id = users.user_id
+  WHERE users,username = $1`;
+
+  const { rows } = await pool.query(query, [username]);
+  return rows;
 };
 
 // 3. Get all bookmarks that have at least one tag, along with the tag name.
@@ -18,6 +33,12 @@ const getBookmarksByUsername = async (username) => {
 //    Return an array of objects. Each object should have: title, url, tag_name.
 const getBookmarksWithAllTags = async () => {
   // YOUR CODE HERE
+  const query = `
+    SELECT bookmarks.title, bookmarks.url, tags.tag_name
+    FROM bookmarks
+    JOIN tags ON bookmark_tags.tag_id = tags.tag_id`;
+  const { rows } = await pool.query(query);
+  return rows;
 };
 
 // 4. Get all users and the total number of bookmarks they have saved.
