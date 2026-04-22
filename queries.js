@@ -22,7 +22,7 @@ const getBookmarksByUsername = async (username) => {
   SELECT bookmarks.title, bookmarks.url, users.username
   FROM bookmarks
   JOIN users ON bookmarks.user_id = users.user_id
-  WHERE users,username = $1`;
+  WHERE users.username = $1`;
 
   const { rows } = await pool.query(query, [username]);
   return rows;
@@ -47,6 +47,8 @@ const getBookmarksWithAllTags = async () => {
 //    Return an array of objects. Each object should have: username, total_bookmarks.
 const getUsersWithBookmarkCount = async () => {
   // YOUR CODE HERE
+  const query = `
+   SELECT SUM(bookmarks) FROM users `
 };
 
 // 5. Get all bookmarks that have no tags.
